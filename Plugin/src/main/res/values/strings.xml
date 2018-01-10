@@ -16,6 +16,7 @@
     <string name="cpu_usage">CPU Usage</string>
     <string name="free_memory">Free RAM</string>
     <string name="network">Network</string>
+    <string name="cpu_temp">CPU Temp</string>
     <string name="disk">Disk Usage</string>
     <string name="connecting">Connecting...</string>
     <string name="disconnecting">Disconnecting...</string>

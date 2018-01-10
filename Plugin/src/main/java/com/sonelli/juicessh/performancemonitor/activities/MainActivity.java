@@ -28,6 +28,7 @@ import com.sonelli.juicessh.performancemonitor.controllers.DiskUsageController;
 import com.sonelli.juicessh.performancemonitor.controllers.FreeRamController;
 import com.sonelli.juicessh.performancemonitor.controllers.LoadAverageController;
 import com.sonelli.juicessh.performancemonitor.controllers.NetworkUsageController;
+import com.sonelli.juicessh.performancemonitor.controllers.TempController;
 import com.sonelli.juicessh.performancemonitor.helpers.PreferenceHelper;
 import com.sonelli.juicessh.performancemonitor.loaders.ConnectionListLoader;
 import com.sonelli.juicessh.performancemonitor.views.AutoResizeTextView;
@@ -63,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     private BaseController cpuUsageController;
     private BaseController diskUsageController;
     private BaseController networkUsageController;
+    private BaseController tempController;
 
     // Text displays
     private AutoResizeTextView loadAverageTextView;
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
     private AutoResizeTextView cpuUsageTextView;
     private AutoResizeTextView networkUsageTextView;
     private AutoResizeTextView diskUsageTextView;
+    private AutoResizeTextView tempTextView;
 
     // State
     private volatile int sessionId;
@@ -101,6 +104,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         this.cpuUsageTextView = (AutoResizeTextView) findViewById(R.id.cpu_usage);
         this.networkUsageTextView = (AutoResizeTextView) findViewById(R.id.network_usage);
         this.diskUsageTextView = (AutoResizeTextView) findViewById(R.id.disk_usage);
+        this.tempTextView = (AutoResizeTextView) findViewById(R.id.cpu_temp);
 
         this.connectButton = (Button) findViewById(R.id.connect_button);
         Drawable drawable = getDrawable(R.drawable.login);
@@ -294,6 +298,13 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
                 .setTextview(cpuUsageTextView)
                 .start();
 
+        this.tempController = new TempController(this)
+                .setSessionId(sessionId)
+                .setSessionKey(sessionKey)
+                .setPluginClient(client)
+                .setTextview(tempTextView)
+                .start();
+
         this.diskUsageController = new DiskUsageController(this)
                 .setSessionId(sessionId)
                 .setSessionKey(sessionKey)
@@ -335,6 +346,10 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
             cpuUsageController.stop();
         }
 
+        if(tempController != null){
+            tempController.stop();
+        }
+
         if(diskUsageController != null){
             diskUsageController.stop();
         }
@@ -346,6 +361,7 @@ public class MainActivity extends AppCompatActivity implements ActionBar.OnNavig
         loadAverageTextView.setText("-");
         freeRamTextView.setText("-");
         cpuUsageTextView.setText("-");
+        tempTextView.setText("-");
         networkUsageTextView.setText("-");
         diskUsageTextView.setText("-");
 
